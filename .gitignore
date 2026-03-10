@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+*.glb
+output/
+audit_3d/
+audit_views_output/
+output_test_fix/
+output_test_fix2/
+history files/
+.DS_Store

@@ -114,8 +114,10 @@ def _bake_normal_map(albedo: np.ndarray) -> np.ndarray:
     """
     gray = cv2.cvtColor((albedo * 255).astype(np.uint8), cv2.COLOR_BGR2GRAY).astype(np.float32)
 
-    grad_x = cv2.Sobel(gray, cv2.CV_32F, 1, 0, kscale=3) / 255.0
-    grad_y = cv2.Sobel(gray, cv2.CV_32F, 0, 1, kscale=3) / 255.0
+    # OpenCV Sobel on your version does not accept `kscale` as a keyword;
+    # use the default scale and supply only the standard positional args.
+    grad_x = cv2.Sobel(gray, cv2.CV_32F, 1, 0) / 255.0
+    grad_y = cv2.Sobel(gray, cv2.CV_32F, 0, 1) / 255.0
     grad_z = np.ones_like(grad_x)
 
     normal = np.stack([grad_x, grad_y, grad_z], axis=-1)

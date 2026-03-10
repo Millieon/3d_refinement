@@ -22,7 +22,35 @@ def _decimate(mesh: trimesh.Trimesh, target_faces: int, label: str = "") -> trim
         log.info(f"  {label}Already at {len(mesh.faces)} faces, skipping")
         return mesh
     try:
-        decimated = mesh.simplify_quadric_decimation(target_faces)
+        # trimesh has shipped multiple simplify APIs across versions:
+        # - simplify_quadratic_decimation(target_faces: int)
+        # - simplify_quadric_decimation(target_faces: int)  (some forks/versions)
+        # - simplify_*decimation(target_reduction: float in [0, 1])
+        # We support both "target face count" and "target_reduction".
+        simplify_fn = getattr(mesh, "simplify_quadratic_decimation", None) or getattr(
+            mesh, "simplify_quadric_decimation", None
+        )
+        if simplify_fn is None:
+            raise AttributeError("Mesh has no simplify_*_decimation method")
+
+        current_faces = len(mesh.faces)
+        reduction = max(0.0, min(1.0, 1.0 - (float(target_faces) / float(current_faces))))
+
+        # Prefer "target face count" call style first.
+        # If the function actually expects a reduction ratio, passing a huge int
+        # typically errors with "target_reduction must be between 0 and 1".
+        try:
+            decimated = simplify_fn(int(target_faces))
+        except Exception as e_faces:
+            # Next, try reduction ratio as positional float.
+            try:
+                decimated = simplify_fn(float(reduction))
+            except Exception as e_reduction:
+                # Last resort: keyword call for builds that support it.
+                try:
+                    decimated = simplify_fn(target_reduction=float(reduction))
+                except Exception:
+                    raise e_faces from e_reduction
         log.info(f"  {label}{len(mesh.faces):,} → {len(decimated.faces):,} faces")
         return decimated
     except Exception as e:
