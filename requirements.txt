@@ -1,0 +1,6 @@
+trimesh>=4.0.0
+opencv-python>=4.9.0
+scipy>=1.12.0
+numpy>=1.26.0
+anthropic>=0.25.0
+pyrender>=0.1.45          # optional but recommended for quality renders
