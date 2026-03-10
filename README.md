@@ -33,7 +33,19 @@ python pipeline.py \
   --iterations 3
 ```
 
+just the 3d auditing part:
+```bash
+cd ~/Downloads/3D_model_refinement/3d_model_refinement
+
+export ANTHROPIC_API_KEY=sk-ant-...your-key...
+
+python audit_3d_vs_views.py \
+  --mesh xiaolanglanglang.glb \
+  --views ../views/ \
+  --output ../audit_3d/
+
 ## Output
+```
 
 ```
 output/
