@@ -1,0 +1,28 @@
+{
+  "audit": {
+    "overall_score": 0.0,
+    "view_scores": {
+      "front": null,
+      "back": null,
+      "left": null,
+      "right": null,
+      "top": null,
+      "three_quarter": null
+    },
+    "top_issues": [],
+    "priority_regions": []
+  },
+  "qa": {
+    "final_mean_error_px": 39.34971938138667,
+    "passed_threshold": false,
+    "per_view_errors": {
+      "front": 149.25859879297317,
+      "back": 86.83971749534685,
+      "left": 0.0,
+      "right": 0.0,
+      "top": 0.0,
+      "three_quarter": 0.0
+    },
+    "worst_view": "front"
+  }
+}
